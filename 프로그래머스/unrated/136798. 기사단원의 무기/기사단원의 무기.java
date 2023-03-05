@@ -1,24 +1,33 @@
+import java.util.Arrays;
+
 class Solution {
     public int solution(int number, int limit, int power) {
-        int answer = 1;
-        for (int i = 2; i <= number; i++) {
-            int count = 2;
-            for (int j = 2; j <= Math.sqrt(i); j++) {
-                if (i % j == 0) {
-                    if (j == Math.sqrt(i)) {
-                        count++;
-                    } else {
-                        count += 2;
-                    }
-                }
+
+        int[] counts = new int[number + 1];
+        for (int i = 1; i <= number; i++) {
+            if (getCounts(i) > limit) {
+                counts[i] = power;
+                continue;
             }
-            if (count > limit) {
-                answer += power;
-            } else {
-                answer += count;
+            counts[i] = getCounts(i);
+        }
+
+        return Arrays.stream(counts).sum();
+    }
+
+    public int getCounts(int num) {
+        if (num < 2) {
+            return 1;
+        }
+        int count = 2;
+        for (int i = 2; i < Math.sqrt(num); i++) {
+            if (num % i == 0) {
+                count += 2;
             }
         }
-//        System.out.println(answer);
-        return answer;
+        if (num % Math.sqrt(num) == 0) {
+            count++;
+        }
+        return count;
     }
 }
