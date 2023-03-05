@@ -2,17 +2,25 @@ import java.util.PriorityQueue;
 
 class Solution {
     public int[] solution(int k, int[] score) {
-        int[] answer = new int[score.length];
+        int[] results = new int[score.length];
 
-        PriorityQueue<Integer> topk = new PriorityQueue<>();
-        for (int i = 0; i < score.length; i++) {
-            topk.add(score[i]);
-            if (topk.size() > k) {
-                topk.poll();
+        PriorityQueue<Integer> kList = new PriorityQueue<>();
+        for (int i = 0; i < k; i++) {
+            if(i >= score.length){
+                break;
             }
-            answer[i] = topk.peek();
+            kList.add(score[i]);
+            results[i] = kList.peek();
         }
-//        System.out.println(Arrays.toString(answer));
-        return answer;
+
+        for (int i = k; i < score.length; i++) {
+            if (kList.peek() < score[i]) {
+                kList.poll();
+                kList.add(score[i]);
+            }
+            results[i] = kList.peek();
+        }
+
+        return results;
     }
 }
