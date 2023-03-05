@@ -1,21 +1,25 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        LinkedList<String> partList = new LinkedList<>();
+        Map<String, Integer> counts = new HashMap<>();
+
         for (int i = 0; i < participant.length; i++) {
-            partList.add(participant[i]);
+            if (counts.containsKey(participant[i])) {
+                counts.replace(participant[i], counts.get(participant[i]) + 1);
+                continue;
+            }
+            counts.put(participant[i], 1);
         }
 
-        partList.sort(Comparator.naturalOrder());
-        Arrays.sort(completion);
         for (int i = 0; i < completion.length; i++) {
-            if (partList.contains(completion[i])) {
-                partList.remove(completion[i]);
+            counts.replace(completion[i], counts.get(completion[i]) - 1);
+            if (counts.get(completion[i]) == 0) {
+                counts.remove(completion[i]);
             }
         }
 
-//        System.out.println(partList);
-        return partList.get(0);
+        return counts.keySet().stream().findFirst().get();
     }
 }
