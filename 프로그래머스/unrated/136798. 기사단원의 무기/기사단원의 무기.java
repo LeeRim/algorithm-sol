@@ -1,18 +1,16 @@
-import java.util.Arrays;
-
 class Solution {
     public int solution(int number, int limit, int power) {
 
-        int[] counts = new int[number + 1];
+        int sum = 0;
         for (int i = 1; i <= number; i++) {
             if (getCounts(i) > limit) {
-                counts[i] = power;
+                sum += power;
                 continue;
             }
-            counts[i] = getCounts(i);
+            sum += getCounts(i);
         }
 
-        return Arrays.stream(counts).sum();
+        return sum;
     }
 
     public int getCounts(int num) {
