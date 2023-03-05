@@ -1,25 +1,34 @@
 class Solution {
     public int solution(String[] babbling) {
-        String[] ables = {"aya", "ye", "woo", "ma"};
 
         int answer = 0;
-        for (String bab : babbling) {
-            String pre = "";
-            for (int i = 0; i < ables.length; i++) {
-                String able = ables[i];
-                if (bab.startsWith(able) && !pre.equals(able)) {
-                    bab = bab.substring(able.length());
-                    if (bab.length() == 0) {
-                        answer++;
-                        break;
-                    }
-                    pre = able;
-                    i = -1;
+        for (int i = 0; i < babbling.length; i++) {
+            if (isCan(babbling[i])) {
+                answer++;
+            }
+        }
+        return answer;
+    }
+
+    public boolean isCan(String word) {
+        String[] strs = {"aya", "ye", "woo", "ma"};
+
+        boolean isCan;
+        String before = "";
+        while (word.length() > 0) {
+            isCan = false;
+            for (int i = 0; i < strs.length; i++) {
+                if (word.startsWith(strs[i]) && !strs[i].equals(before)) {
+                    before = strs[i];
+                    word = word.substring(strs[i].length());
+                    isCan = true;
                 }
+            }
+            if (!isCan) {
+                return false;
             }
         }
 
-//        System.out.println(answer);
-        return answer;
+        return true;
     }
 }
