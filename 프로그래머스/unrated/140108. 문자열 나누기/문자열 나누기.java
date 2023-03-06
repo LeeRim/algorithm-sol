@@ -1,26 +1,35 @@
 class Solution {
     public int solution(String s) {
-        int answer = 1;
 
-        char start = s.charAt(0);
-        int startCount = 1;
-        int noneCount = 0;
-        for (int i = 1; i < s.length(); i++) {
-            if (startCount == noneCount) {
-                startCount = 1;
-                noneCount = 0;
-                start = s.charAt(i);
-                answer++;
-                continue;
-            }
-            if (start == s.charAt(i)) {
-                startCount++;
-            } else {
-                noneCount++;
-            }
+        int count = 0;
+        String before = "";
+        while (!before.equals(s)) {
+            before = s;
+            s = slice(s);
+            count++;
         }
 
-//        System.out.println(answer);
-        return answer;
+        return count;
+    }
+
+    public String slice(String s){
+        char x = s.charAt(0);
+
+        int index = 0;
+        int countX = 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (countX == 0) {
+                index = i;
+                break;
+            }
+
+            if (s.charAt(i) == x) {
+                countX++;
+                continue;
+            }
+            countX--;
+        }
+
+        return s.substring(index);
     }
 }
