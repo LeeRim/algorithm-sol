@@ -1,27 +1,26 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class Solution {
     boolean solution(String s) {
-            boolean answer = true;
+        List<Character> opens = new ArrayList<>();
 
-            int count = 0;
-            for (int i = 0; i < s.length(); i++) {
-                if (s.charAt(i) == '(') {
-                    count++;
-                } else {
-                    count--;
-                }
-
-                if (count < 0) {
-                    answer = false;
-                    break;
-                }
+        boolean answer = true;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                opens.add('(');
+                continue;
             }
-
-            if (count > 0) {
+            if (opens.isEmpty()) {
                 answer = false;
+                break;
             }
-
-            // System.out.println(answer);
-
-            return answer;
+            opens.remove(opens.size() - 1);
         }
+
+        if (!opens.isEmpty()) {
+            answer = false;
+        }
+        return answer;
+    }
 }
