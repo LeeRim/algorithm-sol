@@ -3,38 +3,38 @@ import java.util.Set;
 
 class Solution {
     public int[] solution(int n, String[] words) {
-        int[] result = new int[2];
+        Set<String> befores = new HashSet<>();
 
-        Set<String> answer = new HashSet<>();
+        boolean success = true;
 
-        int index = 0;
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].length() == 1) {
-                index = i;
+        char pre = words[0].charAt(0);
+        int round = 1;
+        int player = 0;
+        for (String word : words) {
+            player++;
+            if (befores.contains(word)) {
+                success = false;
                 break;
             }
-            if (!answer.add(words[i])) {
-                index = i;
+            if (pre != word.charAt(0)) {
+                success = false;
                 break;
             }
-            if (i > 0 && words[i].charAt(0) != words[i - 1].charAt(words[i - 1].length() - 1)) {
-                index = i;
-                break;
-            }
-        }
-        index++;
 
-        if (words.length != answer.size()) {
-            if (index % n == 0) {
-                result[0] = n;
-                result[1] = index / n;
-            } else {
-                result[0] = index % n;
-                result[1] = index / n + 1;
+            befores.add(word);
+            pre = word.charAt(word.length() - 1);
+
+            if (player == n) {
+                player = 0;
+                round++;
             }
         }
 
-//        System.out.println(Arrays.toString(result));
-        return result;
+        if (success) {
+            return new int[]{0, 0};
+        }
+
+        int[] answer = {player, round};
+        return answer;
     }
 }
