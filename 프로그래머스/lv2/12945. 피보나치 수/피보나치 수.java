@@ -1,13 +1,12 @@
 class Solution {
     public int solution(int n) {
-        int n1 = 1;
-        int n2 = 0;
-        int temp = 0;
-        for (int i = 2; i < n; i++) {
-            temp = n1;
-            n1 = ((n1 % 1234567) + (n2 % 1234567)) % 1234567;
-            n2 = temp;
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+
+        for (int i = 2; i <= n; i++) {
+            dp[i] = (int) (((long)dp[i - 1] + dp[i - 2]) % 1234567);
         }
-        return (n1 + n2) % 1234567;
+        
+        return dp[n];
     }
 }
