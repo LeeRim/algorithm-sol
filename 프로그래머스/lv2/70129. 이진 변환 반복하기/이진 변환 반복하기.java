@@ -7,7 +7,7 @@ class Solution {
         while (!s.equals("1")) {
             count = getCount0(s);
             count0 += count;
-            s = change(s.length() - count);
+            s = Integer.toBinaryString(s.length() - count);
             changeCount++;
         }
 
@@ -19,9 +19,5 @@ class Solution {
         return (int) s.chars()
                 .filter(c -> c == '0')
                 .count();
-    }
-
-    public String change(int count) {
-        return Integer.toBinaryString(count);
     }
 }
