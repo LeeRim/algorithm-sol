@@ -1,24 +1,20 @@
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
     public int[] solution(String s) {
-        List<Integer> countZero = new ArrayList<>();
 
+        int changeCount = 0;
+        int count0 = 0;
         int count;
         while (!s.equals("1")) {
             count = getCount0(s);
-            countZero.add(count);
+            count0 += count;
             s = change(s.length() - count);
+            changeCount++;
         }
 
-        int[] answer = {countZero.size(),
-                countZero.stream()
-                        .mapToInt(i -> i)
-                        .sum()};
+        int[] answer = {changeCount, count0};
         return answer;
     }
-
+    
     public int getCount0(String s) {
         return (int) s.chars()
                 .filter(c -> c == '0')
