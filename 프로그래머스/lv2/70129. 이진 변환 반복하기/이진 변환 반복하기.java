@@ -1,29 +1,31 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class Solution {
     public int[] solution(String s) {
-         int sLen = s.length();
-         int count0 = 0;//총 제거된 0의 수
-         int changeCount = 0;//2진 변환 수
-         int nextNum;
-        while (s.length() > 1) {
-            changeCount++;
-            nextNum = remove0(s).length(); //1만 남은 s
-            count0 += sLen - nextNum; //s의 길이 - 1만 남은 s == 제거된 0의 갯수
-            s = Integer.toString(nextNum, 2); //1만 남은 s의 길이 2진 변환
-            sLen = s.length();
+        List<Integer> countZero = new ArrayList<>();
+
+        int count;
+        while (!s.equals("1")) {
+            count = getCount0(s);
+            countZero.add(count);
+            s = change(s.length() - count);
         }
 
-//        System.out.println("changeCount = " + changeCount);
-//        System.out.println("count0 = " + count0);
-        return new int[]{changeCount, count0};
+        int[] answer = {countZero.size(),
+                countZero.stream()
+                        .mapToInt(i -> i)
+                        .sum()};
+        return answer;
     }
 
-    public String remove0(String str) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == '1') {
-                sb.append("1");
-            }
-        }
-        return sb.toString();
+    public int getCount0(String s) {
+        return (int) s.chars()
+                .filter(c -> c == '0')
+                .count();
+    }
+
+    public String change(int count) {
+        return Integer.toBinaryString(count);
     }
 }
