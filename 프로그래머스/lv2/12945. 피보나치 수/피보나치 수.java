@@ -1,12 +1,15 @@
 class Solution {
     public int solution(int n) {
-        int[] dp = new int[n + 1];
-        dp[1] = 1;
 
+        long n1 = 0;
+        long n2 = 1;
+        long temp;
         for (int i = 2; i <= n; i++) {
-            dp[i] = (int) (((long)dp[i - 1] + dp[i - 2]) % 1234567);
+            temp = n2;
+            n2 = (n1 + n2) % 1234567;
+            n1 = temp;
         }
-        
-        return dp[n];
+
+        return (int) n2;
     }
 }
