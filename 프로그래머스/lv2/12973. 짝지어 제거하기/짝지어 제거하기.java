@@ -1,26 +1,25 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class Solution
-{
+class Solution {
     public int solution(String s) {
-        int answer = 0;
 
         List<Character> stack = new ArrayList<>();
         for (int i = 0; i < s.length(); i++) {
-            if (!stack.isEmpty()) {
-                if (stack.get(stack.size() - 1) == s.charAt(i)) {
-                    stack.remove(stack.size() - 1);
-                    continue;
-                }
+            if (stack.isEmpty()) {
+                stack.add(s.charAt(i));
+                continue;
             }
-            stack.add(s.charAt(i));
+            if (stack.get(stack.size() - 1) == s.charAt(i)) {
+                stack.remove(stack.size() - 1);
+            } else {
+                stack.add(s.charAt(i));
+            }
         }
 
-//        System.out.println(stack);
-        if (stack.size() == 0) {
-            answer = 1;
+        if (stack.isEmpty()) {
+            return 1;
         }
-        return answer;
+        return 0;
     }
 }
