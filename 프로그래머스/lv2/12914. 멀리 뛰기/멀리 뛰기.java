@@ -7,9 +7,7 @@ class Solution {
         for (int i = 2; i <= n; i++) {
             dp[i] = (dp[i - 1] + dp[i - 2]) % 1234567;
         }
-
-        long answer = dp[n];
-//        System.out.println(answer);
-        return answer;
+        
+        return dp[n];
     }
 }
