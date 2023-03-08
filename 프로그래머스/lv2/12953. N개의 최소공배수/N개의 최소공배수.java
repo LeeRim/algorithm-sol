@@ -1,42 +1,28 @@
-import java.util.Arrays;
-import java.util.LinkedList;
-
 class Solution {
+
     public int solution(int[] arr) {
-        int answer = 0;
-        LinkedList<Integer> nums = new LinkedList<Integer>();
-        Arrays.sort(arr);
-        for (int a : arr) {
-            nums.add(Integer.valueOf(a));
+
+        int pre = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            pre = lcm(pre, arr[i]);
         }
-        while (nums.size() != 1) {
-//            System.out.println("a : " + nums.getLast() + " / b : " + nums.get(nums.size() - 2));
-            nums.add(getLcm(nums.pollLast(), nums.pollLast()));
-        }
-        
-        answer = nums.getFirst();
-//        System.out.println(answer);
-        return answer;
+
+        return pre;
     }
 
-    public int getLcm(int a, int b) {
-        int gcd = getGcd(a, b);
-//        System.out.println("l :" + (a * b) / gcd);
-        return (a * b) / gcd;
+    public int gcd(int a, int b) {
+        if (a > b) {
+            int temp = a;
+            a = b;
+            b = temp;
+        }
+        if(b % a == 0) {
+            return a;
+        }
+        return gcd(b % a, a);
     }
 
-    public int getGcd(int a, int b) {
-        int r = -1;
-        int num = a;
-        int g = b;
-        while (r != 0) {
-            if (r != -1) {
-                num = g;
-                g = r;
-            }
-            r = num % g;
-        }
-//        System.out.println("g :" + g);
-        return g;
+    public int lcm(int a, int b){
+        return a * b / gcd(a, b);
     }
 }
