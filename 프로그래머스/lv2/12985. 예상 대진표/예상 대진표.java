@@ -1,5 +1,4 @@
-class Solution
-{
+class Solution {
     public int solution(int n, int a, int b) {
         if (a > b) {
             int temp = a;
@@ -7,15 +6,19 @@ class Solution
             b = temp;
         }
 
-        int round = 1;
-        while (!(b - a == 1 && b % 2 == 0)) {
-            a = a % 2 == 0? a : a + 1;
-            b = b % 2 == 0? b : b + 1;
-            a = a / 2;
-            b = b / 2;
-            round++;
+        int count = 1;
+        while (b - a > 1 || a % 2 == 0) {
+            if (a % 2 != 0) {
+                a++;
+            }
+            if (b % 2 != 0) {
+                b++;
+            }
+            a /= 2;
+            b /= 2;
+            count++;
         }
 
-        return round;
+        return count;
     }
 }
