@@ -4,52 +4,46 @@ import java.util.List;
 import java.util.Map;
 
 class Solution {
+    Map<Character, Character> pair;
+
     public int solution(String s) {
-        if (s.length() % 2 != 0) {
-            return 0;
-        }
-        
-        StringBuilder sb = new StringBuilder(s);
+        pair = new HashMap<>();
+        pair.put(')', '(');
+        pair.put('}', '{');
+        pair.put(']', '[');
+
         int count = 0;
         for (int i = 0; i < s.length(); i++) {
-//            System.out.println(sb.toString());
-//            System.out.println(isRight(sb.toString()));
-            if (isRight(sb.toString())) {
+            s = s.substring(1) + s.charAt(0);
+            if (isRight(s)) {
                 count++;
             }
-            sb.append(s.charAt(i));
-            sb.deleteCharAt(0);
         }
-//        System.out.println(count);
+
         return count;
     }
 
     public boolean isRight(String s) {
-        Map<Character, Character> pairs = new HashMap<>();
-        pairs.put('(', ')');
-        pairs.put('{', '}');
-        pairs.put('[', ']');
-
         List<Character> stack = new ArrayList<>();
         for (int i = 0; i < s.length(); i++) {
-            if (pairs.containsKey(s.charAt(i))) {
+            if (pair.containsValue(s.charAt(i))) {
                 stack.add(s.charAt(i));
                 continue;
             }
+
             if (stack.isEmpty()) {
                 return false;
             }
-
-            char pop = stack.get(stack.size() - 1);
-            if (pairs.get(pop) == s.charAt(i)) {
+            if (pair.get(s.charAt(i)) == stack.get(stack.size() - 1)) {
                 stack.remove(stack.size() - 1);
             } else {
-                break;
+                return false;
             }
         }
-        if (!stack.isEmpty()) {
-            return false;
+
+        if (stack.isEmpty()) {
+            return true;
         }
-        return true;
+        return false;
     }
 }
