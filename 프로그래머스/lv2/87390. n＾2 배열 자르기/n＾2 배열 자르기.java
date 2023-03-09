@@ -4,7 +4,7 @@ class Solution {
         int[] arr = new int[(int) (right - left) + 1];
 
         for (long i = left; i <= right; i++) {
-            arr[(int) (i - left)] = (int) Math.max(i / m + 1, i % m + 1);
+            arr[(int) (i - left)] = (int) Math.max(i / m, i % m) + 1;
         }
 
         return arr;
