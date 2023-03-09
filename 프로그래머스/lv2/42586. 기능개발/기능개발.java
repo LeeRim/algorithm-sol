@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
@@ -14,27 +13,23 @@ class Solution {
             days[i] = day;
         }
 
-        System.out.println(Arrays.toString(days));
-
-        int max = -1;
-        int re = 0;
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        for (int i=0; i<days.length; i++) {
+        int max = days[0];
+        int doneCount = 0;
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < days.length; i++) {
             if (max >= days[i]) {
-                re++;
+                doneCount++;
             } else {
+                result.add(doneCount);
                 max = days[i];
-                if (re != 0) result.add(re);
-                re = 1;
+                doneCount = 1;
             }
-            if (i == days.length-1){
-                result.add(re);
+            if (i == days.length - 1) {
+                result.add(doneCount);
             }
         }
 
         answer = result.stream().mapToInt(i -> i).toArray();
-
-        System.out.println(Arrays.toString(answer));
 
         return answer;
     }
