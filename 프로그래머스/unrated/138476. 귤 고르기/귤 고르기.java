@@ -1,29 +1,33 @@
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 class Solution {
-
     public int solution(int k, int[] tangerine) {
         Map<Integer, Integer> counts = new HashMap<>();
         for (int i : tangerine) {
-            if (!counts.containsKey(i)) {
-                counts.put(i, 1);
+            if (counts.containsKey(i)) {
+                counts.replace(i, counts.get(i) + 1);
                 continue;
             }
-            counts.replace(i, counts.get(i) + 1);
+            counts.put(i, 1);
         }
 
-        List<Integer> sizes = new ArrayList<>(counts.keySet());
-        sizes.sort((o1, o2) -> counts.get(o2) - counts.get(o1));
+        List<Integer> sortedCounts = counts.values().stream()
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
 
-        int typeCount = 0;
-        for (Integer size : sizes) {
+        int index = 0;
+        for (int i = 0; i < sortedCounts.size(); i++) {
+            k -= sortedCounts.get(i);
             if (k <= 0) {
+                index = i;
                 break;
             }
-            k -= counts.get(size);
-            typeCount++;
         }
 
-        return typeCount;
+        return index + 1;
     }
 }
