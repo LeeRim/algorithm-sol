@@ -3,27 +3,36 @@ import java.util.Map;
 
 class Solution {
     public int solution(String[] want, int[] number, String[] discount) {
-        Map<String, Integer> wantCount = new HashMap<>();
+        int remain = 0;
+        Map<String, Integer> wants = new HashMap<>();
         for (int i = 0; i < want.length; i++) {
-            wantCount.put(want[i], number[i]);
+            wants.put(want[i], number[i]);
+            remain += number[i];
         }
 
         int answer = 0;
-        for (int i = 0; i <= discount.length - 10; i++) {
-            Map<String, Integer> buy = new HashMap<>(wantCount);
-            for (int j = i; j < i + 10; j++) {
-                if (buy.containsKey(discount[j])) {
-                    if (buy.get(discount[j]) <= 1) {
-                        buy.remove(discount[j]);
-                        continue;
+        for (int i = 0; i < discount.length; i++) {
+            if (wants.containsKey(discount[i])) {
+                if (wants.get(discount[i]) > 0) {
+                    remain--;
+                }
+                wants.replace(discount[i], wants.get(discount[i]) - 1);
+            }
+
+            if (i >= 10) {
+                if (wants.containsKey(discount[i - 10])) {
+                    wants.replace(discount[i - 10], wants.get(discount[i - 10]) + 1);
+                    if (wants.get(discount[i - 10]) > 0) {
+                        remain++;
                     }
-                    buy.replace(discount[j], buy.get(discount[j]) - 1);
                 }
             }
-            if (buy.isEmpty()) {
+
+            if (remain <= 0) {
                 answer++;
             }
         }
+
         return answer;
     }
 }
