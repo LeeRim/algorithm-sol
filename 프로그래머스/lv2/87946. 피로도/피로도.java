@@ -1,34 +1,41 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class Solution {
-    private int max;
+    int max;
     public int solution(int k, int[][] dungeons) {
         max = 0;
-        dfs(dungeons, new boolean[dungeons.length], k, 0);
+        getPermutation(dungeons, k, new boolean[dungeons.length], new ArrayList<>());
+
         return max;
     }
 
-    public void dfs(int[][] dungeons, boolean[] visited, int k, int count) {
-        int visitCount = 0;
-        for (boolean b : visited) {
-            if (b) {
-                visitCount++;
-            }
+    public void getPermutation(int[][] dungeons, int k, boolean[] visited, List<int[]> permutations) {
+        if (max == dungeons.length) {
+            return;
         }
-        if (visitCount == visited.length) {
-            max = Math.max(max, count);
+        if (!permutations.isEmpty() && k < permutations.get(permutations.size() - 1)[0]) {
+            max = Math.max(max, permutations.size() - 1);
+            return;
+        }
+        if (permutations.size() == dungeons.length) {
+            max = dungeons.length;
             return;
         }
 
-        for (int i = 0; i < dungeons.length; i++) {
+        if (!permutations.isEmpty()) {
+            k -= permutations.get(permutations.size() - 1)[1];
+        }
+
+        for (int i = 0; i < visited.length; i++) {
             if (visited[i]) {
                 continue;
             }
             visited[i] = true;
-            if (k < dungeons[i][0]) {
-                dfs(dungeons, visited.clone(), k, count);
-                continue;
-            }
-            dfs(dungeons, visited.clone(), k - dungeons[i][1], count + 1);
+            permutations.add(dungeons[i]);
+            getPermutation(dungeons, k, visited.clone(), new ArrayList<>(permutations));
             visited[i] = false;
+            permutations.remove(permutations.size() - 1);
         }
     }
 }
