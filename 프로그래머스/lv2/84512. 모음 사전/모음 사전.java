@@ -1,28 +1,37 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 class Solution {
-    List<String> words;
+    int answer;
+    int count;
+    boolean isDone;
+    char[] chars = {'A', 'E', 'I', 'O', 'U'};
+
     public int solution(String word) {
-        words = new ArrayList<>();
-        String[] vowels = {"A", "E", "I", "O", "U"};
-        makeWord(vowels, new StringBuilder(), 0);
-        Collections.sort(words);
-        return words.indexOf(word);
+        count = 0;
+        isDone = false;
+
+        makeWord(word, new StringBuilder());
+
+        return answer;
     }
 
-    public void makeWord(String[] vowels, StringBuilder sb, int count) {
-        if (count > 5) {
+    public void makeWord(String word, StringBuilder str) {
+        if (isDone) {
             return;
         }
-        words.add(sb.toString());
-        for (String vowel : vowels) {
-            sb.append(vowel);
-            makeWord(vowels, new StringBuilder(sb), count + 1);
-            if (!vowel.equals("")) {
-                sb.delete(sb.length() - 1, sb.length());
-            }
+        if (word.equals(str.toString())) {
+            isDone = true;
+            answer = count;
+            return;
+        }
+        if (str.length() >= 5) {
+            return;
+        }
+
+
+        for (int i = 0; i < 5; i++) {
+            count++;
+            str.append(chars[i]);
+            makeWord(word, new StringBuilder(str));
+            str.deleteCharAt(str.length() - 1);
         }
     }
 }
