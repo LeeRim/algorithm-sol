@@ -1,59 +1,32 @@
-import java.util.Arrays;
-
 class Solution {
     public int[] solution(int[][] arr) {
-        int[] counts = new int[2];
-        compress(arr, counts);
-        return counts;
+        return press(arr, 0, arr.length, 0, arr.length);
     }
 
-    public void compress(int[][] arr, int[] counts) {
-        if (arr.length == 1 || canCompress(arr)) {
-            counts[arr[0][0]]++;
-            return;
-        }
-
-        int len = arr.length / 2;
-        int[][] temp = new int[len][len];
-        for (int i = 0; i < len; i++) {
-            for (int j = 0; j < len; j++) {
-                temp[i][j] = arr[i][j];
+    public int[] press(int[][] arr, int x1, int x2, int y1, int y2) {
+        int count = 0;
+        for (int i = x1; i < x2; i++) {
+            for (int j = y1; j < y2; j++) {
+                if (arr[i][j] == 0) {
+                    count++;
+                }
             }
         }
-        compress(temp.clone(), counts);
 
-        for (int i = 0; i < len; i++) {
-            for (int j = len; j < arr.length; j++) {
-                temp[i][j - len] = arr[i][j];
-            }
+        int total = (int) Math.pow(x2 - x1, 2);
+        if (count == 0) {
+            return new int[]{0, 1};
         }
-        compress(temp.clone(), counts);
+        if (count == total) {
+            return new int[]{1, 0};
+        }
 
-        for (int i = len; i < arr.length; i++) {
-            for (int j = 0; j < len; j++) {
-                temp[i - len][j] = arr[i][j];
-            }
-        }
-        compress(temp.clone(), counts);
+        int half = (x2 - x1) / 2;
+        int[] re1 = press(arr, x1, x2 - half, y1, y2 - half);
+        int[] re2 = press(arr, x1 + half, x2, y1, y2 - half);
+        int[] re3 = press(arr, x1, x2 - half, y1 + half, y2);
+        int[] re4 = press(arr, x1 + half, x2, y1 + half, y2);
 
-        for (int i = len; i < arr.length; i++) {
-            for (int j = len; j < arr.length; j++) {
-                temp[i - len][j - len] = arr[i][j];
-            }
-        }
-        compress(temp.clone(), counts);
-    }
-
-    public boolean canCompress(int[][] arr) {
-        int count0 = 0;
-        int count1 = 0;
-        for (int[] ints : arr) {
-            count0 += Arrays.stream(ints).filter(n -> n == 0).count();
-            count1 += Arrays.stream(ints).filter(n -> n == 1).count();
-            if (count0 != 0 && count1 != 0) {
-                return false;
-            }
-        }
-        return true;
+        return new int[]{re1[0] + re2[0] + re3[0] + re4[0], re1[1] + re2[1] + re3[1] + re4[1]};
     }
 }
