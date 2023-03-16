@@ -1,25 +1,24 @@
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.List;
 
 class Solution {
     public String solution(int[] numbers) {
-        String[] strs = new String[numbers.length];
-        for (int i = 0; i < numbers.length; i++) {
-            strs[i] = String.valueOf(numbers[i]);
+        List<String> strs = new ArrayList<>();
+        for (int number : numbers) {
+            strs.add(String.valueOf(number));
         }
-        Arrays.sort(strs, (a, b) -> (b + a).compareTo(a + b));
-//        System.out.println(Arrays.toString(strs));
 
-        String answer = "";
-        if (answer.startsWith("0")) {
-            answer = "0";
+        strs.sort((o1, o2) -> {
+            return (o2 + o1).compareTo(o1 + o2);
+        });
+
+        if(strs.get(0).startsWith("0")){
+            return "0";
         }
-        for (int i = 0; i < strs.length; i++) {
-            if (answer.equals("0")) {
-                break;
-            }
-            answer += strs[i];
+        StringBuilder sb = new StringBuilder();
+        for (String str : strs) {
+            sb.append(str);
         }
-        return answer;
+        return sb.toString();
     }
 }
