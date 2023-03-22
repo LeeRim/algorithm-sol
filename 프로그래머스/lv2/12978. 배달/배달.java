@@ -1,68 +1,57 @@
-
-import java.util.*;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 class Solution {
-    public int solution(int n, int[][] road, int k) {
-        Map<Integer, List<NodeCost>> graph = new HashMap<>();
-        for (int[] ints : road) {
-            if (!graph.containsKey(ints[0])) {
-                graph.put(ints[0], new ArrayList<>());
-            }
-            graph.get(ints[0]).add(new NodeCost(ints[1], ints[2]));
+    public int solution(int N, int[][] road, int K) {
 
-            if (!graph.containsKey(ints[1])) {
-                graph.put(ints[1], new ArrayList<>());
-            }
-            graph.get(ints[1]).add(new NodeCost(ints[0], ints[2]));
+        int[] mins = new int[N + 1];
+        for (int i = 2; i <= N; i++) {
+            mins[i] = Integer.MAX_VALUE;
         }
 
-
-        int[] distance = new int[n + 1];
-        distance[1] = 0;
-        for (int i = 2; i <= n; i++) {
-            distance[i] = Integer.MAX_VALUE;
+        PriorityQueue<int[]> minDistance = new PriorityQueue<>(Comparator.comparingInt(d -> d[1]));
+        for (int[] r : road) {
+            if (r[0] == 1) {
+                minDistance.add(new int[]{r[1], r[2]});
+                continue;
+            }
+            if (r[1] == 1) {
+                minDistance.add(new int[]{r[0], r[2]});
+            }
         }
 
-        PriorityQueue<NodeCost> costHeap = new PriorityQueue<>();
-        costHeap.add(new NodeCost(1, 0));
-        while (!costHeap.isEmpty()) {
-            NodeCost now = costHeap.poll();
-            if (distance[now.node] < now.cost) {
+        int[] now, next;
+        while (!minDistance.isEmpty()) {
+            now = minDistance.poll();
+
+            if (now[1] >= mins[now[0]]) {
                 continue;
             }
 
-            List<NodeCost> nextTos = graph.get(now.node);
-            for (NodeCost nextTo : nextTos) {
-                if (distance[nextTo.node] > now.cost + nextTo.cost) {
-                    distance[nextTo.node] = now.cost + nextTo.cost;
-                    costHeap.add(new NodeCost(nextTo.node, distance[nextTo.node]));
+            mins[now[0]] = now[1];
+
+            for (int[] r : road) {
+                if (r[0] == now[0]) {
+                    next = new int[]{r[1], r[2]};
+                } else if (r[1] == now[0]) {
+                    next = new int[]{r[0], r[2]};
+                } else {
+                    continue;
+                }
+
+                next[1] += now[1];
+                if (next[1] < mins[next[0]]) {
+                    minDistance.add(next);
                 }
             }
         }
 
-        int count = 0;
-        for (int i = 1; i <= n; i++) {
-            if (distance[i] <= k) {
-                count++;
+        int answer = 1;
+        for (int i = 2; i <= N; i++) {
+            if (mins[i] <= K) {
+                answer++;
             }
         }
-
-        return count;
-    }
-
-
-    class NodeCost implements Comparable<NodeCost> {
-        int node;
-        int cost;
-
-        public NodeCost(int node, int cost) {
-            this.node = node;
-            this.cost = cost;
-        }
-
-        @Override
-        public int compareTo(NodeCost o) {
-            return cost - o.cost;
-        }
+        return answer;
     }
 }
