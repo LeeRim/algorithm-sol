@@ -1,16 +1,16 @@
 class Solution {
     public String solution(int n) {
-        String[] num = {"4", "1", "2"};
+        char[] nums = {'4', '1', '2'};
 
         StringBuilder sb = new StringBuilder();
-        int answer = n;
-        while (answer > 0) {
-            int remain = answer % 3;
-            answer /= 3;
-            sb.append(num[remain]);
-            if (remain == 0) {
-                answer--;
+        int mod;
+        while (n > 0) {
+            mod = n % 3;
+            n /= 3;
+            if (mod == 0) {
+                n--;
             }
+            sb.append(nums[mod]);
         }
 
         return sb.reverse().toString();
